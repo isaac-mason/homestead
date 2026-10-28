@@ -1,0 +1,35 @@
+html,
+body {
+    margin: 0;
+    height: 100%;
+    overflow: hidden;
+    background: #0d0b09;
+    color: #f3ead8;
+    font:
+        14px / 1.4 system-ui,
+        sans-serif;
+}
+
+#loading,
+#hint {
+    position: fixed;
+    left: 50%;
+    transform: translateX(-50%);
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(13, 11, 9, 0.6);
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+}
+
+#loading {
+    top: 50%;
+}
+
+#hint {
+    bottom: 24px;
+}
+
+.hidden {
+    opacity: 0;
+}
