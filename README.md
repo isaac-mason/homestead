@@ -9,4 +9,4 @@ pnpm dev
 
 Click to walk: WASD, shift to run, space to jump.
 
-Footstep sounds from makecat.
+Footstep sounds from makecat. Title set in [Paper Mono](https://github.com/paper-design/paper-mono) (SIL OFL, `assets/fonts/OFL.txt`) with [glyph](https://github.com/pmndrs/glyph).

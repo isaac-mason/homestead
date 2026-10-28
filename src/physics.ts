@@ -35,10 +35,11 @@ enableCollision(worldSettings, LAYER_MOVING, LAYER_MOVING);
 
 export type Physics = {
     world: World;
+    collider: { positions: number[]; indices: number[] } | null;
 };
 
 export function initPhysics(): Physics {
-    return { world: createWorld(worldSettings) };
+    return { world: createWorld(worldSettings), collider: null };
 }
 
 export function updatePhysics(physics: Physics, dt: number): void {
@@ -63,6 +64,7 @@ export async function loadCollider(physics: Physics, url: string): Promise<void>
         const index = geometry.getIndex();
         for (let i = 0; i < (index ? index.count : position.count); i++) indices.push(base + (index ? index.getX(i) : i));
     });
+    physics.collider = { positions, indices };
     rigidBody.create(physics.world, {
         shape: triangleMesh.create({ positions, indices }),
         motionType: MotionType.STATIC,
@@ -79,9 +81,9 @@ const rayCollector = createClosestCastRayCollector();
 const raySettings = createDefaultCastRaySettings();
 raySettings.collideWithBackfaces = true;
 
-export function floorBelow(physics: Physics, x: number, z: number, fromY: number, maxDistance: number): number | null {
+export function rayDistance(physics: Physics, origin: Vec3, direction: Vec3, maxDistance: number): number | null {
     rayCollector.reset();
-    castRay(physics.world, rayCollector, raySettings, [x, fromY, z], [0, -1, 0], maxDistance, staticOnly);
+    castRay(physics.world, rayCollector, raySettings, origin, direction, maxDistance, staticOnly);
     if (rayCollector.hit.status !== CastRayStatus.COLLIDING) return null;
-    return fromY - rayCollector.hit.fraction * maxDistance;
+    return rayCollector.hit.fraction * maxDistance;
 }
