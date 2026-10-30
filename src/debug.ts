@@ -1,4 +1,4 @@
-import type { SplatRenderer } from 'spark-radix';
+import type { SplatRenderer } from '@sparkjsdev/radix';
 import * as THREE from 'three';
 import type { Focus } from './focus';
 import type { Physics } from './physics';

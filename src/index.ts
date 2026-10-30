@@ -1,4 +1,4 @@
-import { createRenderer, GpuArrays, loadSplats, SplatCollection, SplatRenderer } from 'spark-radix';
+import { createRenderer, GpuArrays, loadSplats, SplatCollection, SplatRenderer } from '@sparkjsdev/radix';
 import * as THREE from 'three';
 import kitchenUrl from '../assets/kitchen.spz?url';
 import colliderUrl from '../assets/kitchen-collider.glb?url';
