@@ -10,6 +10,7 @@ import { initInput, updateInput } from './input';
 import { finishLoader, initLoader, setLoaderProgress, setLoaderStage } from './loader';
 import { initPhysics, loadCollider, updatePhysics } from './physics';
 import { applyPlayerCamera, initPlayer, updatePlayer, zoomAmount } from './player';
+import { initPrep, unlockPrep, updatePrep } from './prep';
 import { initTitle, renderTitle, updateTitle } from './title';
 import './style.css';
 
@@ -35,7 +36,8 @@ async function init() {
     const dust = initDust();
     console.log(`homestead: ${dust.count.toLocaleString()} dust motes`);
 
-    const splats = new SplatRenderer({ renderer, collection: new SplatCollection([kitchen, dust.object]) });
+    const prep = initPrep();
+    const splats = new SplatRenderer({ renderer, collection: new SplatCollection([kitchen, dust.object, ...prep.objects]) });
     splats.raycast = () => {};
     scene.add(splats);
 
@@ -44,7 +46,10 @@ async function init() {
     const footsteps = initFootsteps();
     const debug = initDebug(scene, physics, player);
     const vignette = document.getElementById('vignette') as HTMLDivElement;
-    const input = initInput(renderer.domElement, () => unlockFootsteps(footsteps));
+    const input = initInput(renderer.domElement, () => {
+        unlockFootsteps(footsteps);
+        unlockPrep(prep);
+    });
     applyPlayerCamera(player, camera);
     const title = await initTitle(scene, camera, physics);
     setLoaderProgress(loader, 0.95);
@@ -55,7 +60,23 @@ async function init() {
         renderer.setSize(window.innerWidth, window.innerHeight);
     });
 
-    return { scene, camera, renderer, splats, dust, physics, player, focus, footsteps, input, debug, vignette, title, loader };
+    return {
+        scene,
+        camera,
+        renderer,
+        splats,
+        dust,
+        prep,
+        physics,
+        player,
+        focus,
+        footsteps,
+        input,
+        debug,
+        vignette,
+        title,
+        loader,
+    };
 }
 
 type State = Awaited<ReturnType<typeof init>>;
@@ -69,6 +90,7 @@ function update(state: State, dt: number) {
     updateTitle(state.title, state.input.active, state.camera, dt);
     updateFocus(state.focus, state.physics, state.camera, state.splats, dt, !state.title.entered);
     updateDust(state.dust, state.camera, dt);
+    if (state.title.entered) updatePrep(state.prep, state.input.keys, state.camera, dt);
 
     // the WebGL2 backend's CPU sort only runs when asked, and the dust never stops
     if (state.splats.sortMode === 'cpu') state.splats.requestSort();
