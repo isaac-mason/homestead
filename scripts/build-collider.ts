@@ -14,6 +14,7 @@ const FLAT = {
     binSize: 0.02,
     minLevelArea: 0.4,
     snapWithin: 0.05,
+    minLevelGap: 0.1,
 };
 const SIMPLIFY = { error: 0.03, keep: 0.05 };
 
@@ -63,11 +64,19 @@ function flatten({ positions, indices }: Mesh): number[] {
     }
 
     // A level is a local peak of flat area by height, big enough to be a real surface.
-    const levels: number[] = [];
+    // Peaks closer than minLevelGap are one lumpy surface: keep the bigger.
+    const peaks: [number, number][] = [];
     for (const [bin, a] of area) {
         if (a < FLAT.minLevelArea) continue;
         if ((area.get(bin - 1) ?? 0) > a || (area.get(bin + 1) ?? 0) >= a) continue;
-        levels.push(bin * FLAT.binSize);
+        peaks.push([bin * FLAT.binSize, a]);
+    }
+    const levels: number[] = [];
+    for (const [y, a] of peaks.sort((p, q) => q[1] - p[1])) {
+        if (levels.every((level) => Math.abs(level - y) >= FLAT.minLevelGap)) {
+            levels.push(y);
+            console.log(`level ${y.toFixed(2)} m: ${a.toFixed(1)} m² flat`);
+        }
     }
 
     // Only vertices facing up on the whole: where a floor meets a wall, the average leans and it stays put.
