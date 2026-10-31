@@ -178,19 +178,19 @@ const BASKET = {
     // What's in it: the kind, where (metres along and across from the middle), how high, which way it lies, and how
     // steeply it leans (celery propped up, its leaves out over the rim).
     items: [
-        { kind: 'carrot', at: [-0.12, -0.04], lift: 0, twist: 0.15 },
-        { kind: 'carrot', at: [-0.11, 0.0], lift: 0, twist: -0.05 },
-        { kind: 'carrot', at: [-0.12, 0.045], lift: 0, twist: 0.1 },
-        { kind: 'carrot', at: [-0.1, 0.02], lift: 0.035, twist: -0.2 },
-        { kind: 'onion', at: [0.02, -0.055], lift: 0, twist: 0.8 },
-        { kind: 'onion', at: [0.035, 0.03], lift: 0, twist: -0.6 },
-        { kind: 'onion', at: [0.03, -0.012], lift: 0.05, twist: 1.6 },
+        { kind: 'carrot', at: [-0.08, -0.035], lift: 0, twist: -0.1 },
+        { kind: 'carrot', at: [-0.075, 0.0], lift: 0, twist: 0.05 },
+        { kind: 'carrot', at: [-0.08, 0.04], lift: 0, twist: 0.12 },
+        { kind: 'carrot', at: [-0.065, 0.015], lift: 0.035, twist: -0.12 },
+        { kind: 'onion', at: [0.045, -0.055], lift: 0, twist: 0.8 },
+        { kind: 'onion', at: [0.06, 0.03], lift: 0, twist: -0.6 },
+        { kind: 'onion', at: [0.055, -0.012], lift: 0.05, twist: 1.6 },
         { kind: 'celery', at: [0.09, 0.0], lift: 0.05, twist: 0.12, pitch: 0.42 },
         { kind: 'celery', at: [0.11, 0.03], lift: 0.06, twist: -0.1, pitch: 0.38 },
     ] as { kind: Kind; at: [number, number]; lift: number; twist: number; pitch?: number }[],
 };
 // Where each kind is picked from: the middle of its heap, in basket terms.
-const HEAPS: Record<Kind, [number, number]> = { carrot: [-0.11, 0.005], onion: [0.03, -0.01], celery: [0.12, 0.02] };
+const HEAPS: Record<Kind, [number, number]> = { carrot: [-0.075, 0.005], onion: [0.055, -0.01], celery: [0.12, 0.02] };
 
 // The arched window at the back of the room, the brightest thing the copper sees, as a direction from the table.
 const WINDOW = normalize(vec3(0.16, 0.2, -0.97));
